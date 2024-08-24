@@ -1,0 +1,16 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1em;
+}
+
+.full-width {
+  width: 100%;
+}
+

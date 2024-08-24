@@ -1,0 +1,31 @@
+<app-header></app-header>
+<div class="container reviews-container">
+  <h2 class="text-center">Reviews Management</h2>
+  <div class="facility" *ngFor="let facility of facilities">
+    <h3>{{ facility.name }} ({{ facility.city }})</h3>
+    <ul class="reviews-list">
+      <li class="review-item" *ngFor="let review of facility.reviews" [ngClass]="{'hidden-review': review.hidden}">
+        <div class="review-details">
+          <p><strong>User Email:</strong> {{ review.email }}</p>
+          <p><strong>Equipment Rating:</strong> {{ review.equipmentRating }}</p>
+          <p><strong>Staff Rating:</strong> {{ review.staffRating }}</p>
+          <p><strong>Hygiene Rating:</strong> {{ review.hygieneRating }}</p>
+          <p><strong>Space Rating:</strong> {{ review.spaceRating }}</p>
+          <p><strong>Comment:</strong> {{ review.comment }}</p>
+        </div>
+        <div class="review-actions">
+          <button class="btn btn-warning" (click)="toggleReviewVisibility(review.id, review.hidden)">
+            {{ review.hidden ? 'Show' : 'Hide' }}
+          </button>
+          <button class="btn btn-danger" (click)="deleteReview(review.id)">Delete</button>
+          <button class="btn btn-primary" (click)="openReplyDialog(review.id)" [disabled]="!review.comment || review.comment.length === 0">Reply</button>
+        </div>
+        <ul class="comments-list">
+          <ng-container *ngFor="let comment of review.comments | filterByParent: 0">
+            <app-comment-item [comment]="comment" (replyClicked)="openReplyDialog($event)"></app-comment-item>
+          </ng-container>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

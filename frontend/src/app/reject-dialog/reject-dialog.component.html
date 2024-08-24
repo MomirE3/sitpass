@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <h3>Reject account request</h3>
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <textarea matInput [(ngModel)]="rejectionReason" rows="3" placeholder="Write your rejection reason here..."></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary" (click)="onConfirm()">Confirm</button>
+  <button mat-button color="warn" (click)="onCancel()">Cancel</button>
+</div>

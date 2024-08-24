@@ -1,0 +1,128 @@
+<app-header></app-header>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-4 text-center">
+      <div class="profile-img">
+        <img [src]="profilePictureUrl || 'https://via.placeholder.com/150'" alt="Profile Picture" class="img-thumbnail">
+        <input type="file" (change)="onFileSelected($event)" class="form-control-file mt-3">
+      </div>
+    </div>
+    <div class="col-md-5">
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="text" class="form-control" [value]="profile.email" readonly>
+        </div>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input id="name" formControlName="name" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="surname">Surname</label>
+          <input id="surname" formControlName="surname" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input id="phoneNumber" formControlName="phoneNumber" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="birthday">Birthday</label>
+          <input id="birthday" formControlName="birthday" type="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="zipCode">Zip Code</label>
+          <input id="zipCode" formControlName="zipCode" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input id="address" formControlName="address" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input id="city" formControlName="city" type="text" class="form-control">
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="oldPassword">Old Password</label>
+          <div class="input-group">
+            <input id="oldPassword" [type]="showOldPassword ? 'text' : 'password'" formControlName="oldPassword" class="form-control">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="toggleShowOldPassword()">
+                <i class="fa" [ngClass]="showOldPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <div class="input-group">
+            <input id="newPassword" [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword" class="form-control">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="toggleShowNewPassword()">
+                <i class="fa" [ngClass]="showNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmNewPassword">Confirm New Password</label>
+          <div class="input-group">
+            <input id="confirmNewPassword" [type]="showConfirmNewPassword ? 'text' : 'password'" formControlName="confirmNewPassword" class="form-control">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="toggleShowConfirmNewPassword()">
+                <i class="fa" [ngClass]="showConfirmNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <h3>Managed Facilities</h3>
+      <ul *ngIf="profile.managedFacilities?.length; else noManagedFacilities">
+        <li *ngFor="let facility of profile.managedFacilities">
+          {{ facility.name }}
+        </li>
+      </ul>
+      <ng-template #noManagedFacilities>
+        <p>No managed facilities.</p>
+      </ng-template>
+    </div>
+    <div class="col-md-4">
+      <h3>Visit History</h3>
+      <ul *ngIf="profile.visitHistory?.length; else noVisitHistory">
+        <li *ngFor="let visit of profile.visitHistory">
+          {{ visit.facilityName }} - From: {{ visit.fromDateTime | date:'short' }} To: {{ visit.toDateTime | date:'short' }}
+        </li>
+      </ul>
+      <ng-template #noVisitHistory>
+        <p>No visit history.</p>
+      </ng-template>
+    </div>
+    <div class="col-md-4">
+      <h3>Reviews</h3>
+      <ul *ngIf="profile.reviews?.length; else noReviews">
+        <li *ngFor="let review of profile.reviews">
+          <strong>{{ review.facilityName }}</strong><br>
+          Equipment: {{ review.equipmentRating }}<br>
+          Staff: {{ review.staffRating }}<br>
+          Hygiene: {{ review.hygieneRating }}<br>
+          Space: {{ review.spaceRating }}<br>
+          <span *ngIf="review.comment" style="font-weight: 600;">Comment: {{ review.comment }}</span><br>
+          <ng-container *ngIf="review.hidden">Hidden</ng-container>
+        </li>
+      </ul>
+      <ng-template #noReviews>
+        <p>No reviews.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

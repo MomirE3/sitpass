@@ -1,0 +1,31 @@
+<app-header></app-header>
+<div class="container mt-5">
+  <h2>Remove Manager from Facility</h2>
+  <form [formGroup]="removeManagerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="facilityId" class="form-label">Select Facility</label>
+      <select id="facilityId" class="form-select" formControlName="facilityId" (change)="onFacilityChange()">
+        <option value=""></option> 
+        <option *ngFor="let facility of facilities" [value]="facility.id">{{ facility.name }}</option>
+      </select>
+      <div *ngIf="removeManagerForm.controls['facilityId'].invalid && (removeManagerForm.controls['facilityId'].dirty || removeManagerForm.controls['facilityId'].touched)" class="text-danger">
+        Facility is required.
+      </div>
+    </div>
+
+    <div *ngIf="managerName" class="mb-3">
+      <label for="managerName" class="form-label">Current Manager</label>
+      <input id="managerName" type="text" class="form-control" [value]="managerName" disabled>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="removeManagerForm.invalid">Remove Manager</button>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
+</div>

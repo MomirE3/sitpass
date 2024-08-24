@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Rejection Reason</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of accountRequests">
+        <td>{{ request.email }}</td>
+        <td>{{ request.address }}</td>
+        <td>{{ request.status }}</td>
+        <td>{{ request.rejectionReason }}</td>
+        <td>
+          <ng-container *ngIf="request.status === 'PENDING'; else viewOnly">
+            <button class="accept-btn" (click)="acceptRequest(request.id)">Accept</button>
+            <button class="delete-btn" (click)="rejectRequest(request.id)">Reject</button>
+          </ng-container>
+          <ng-template #viewOnly>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

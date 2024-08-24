@@ -1,0 +1,53 @@
+<app-header></app-header>
+<div class="container mt-5">
+  <h2>Add Manager to Facility</h2>
+  <form [formGroup]="addManagerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="userId" class="form-label">Select User</label>
+      <select id="userId" class="form-select" formControlName="userId">
+        <option value=""></option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }} {{ user.surname }}</option>
+      </select>
+      <div *ngIf="addManagerForm.controls['userId'].invalid && (addManagerForm.controls['userId'].dirty || addManagerForm.controls['userId'].touched)" class="text-danger">
+        User is required.
+      </div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="facilityId" class="form-label">Select Facility</label>
+      <select id="facilityId" class="form-select" formControlName="facilityId">
+        <option value=""></option>
+        <option *ngFor="let facility of facilities" [value]="facility.id">{{ facility.name }}</option>
+      </select>
+      <div *ngIf="addManagerForm.controls['facilityId'].invalid && (addManagerForm.controls['facilityId'].dirty || addManagerForm.controls['facilityId'].touched)" class="text-danger">
+        Facility is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="startDate" class="form-label">Start Date</label>
+      <input id="startDate" type="date" class="form-control" formControlName="startDate">
+      <div *ngIf="addManagerForm.controls['startDate'].invalid && (addManagerForm.controls['startDate'].dirty || addManagerForm.controls['startDate'].touched)" class="text-danger">
+        Start date is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="endDate" class="form-label">End Date</label>
+      <input id="endDate" type="date" class="form-control" formControlName="endDate">
+      <div *ngIf="addManagerForm.controls['endDate'].invalid && (addManagerForm.controls['endDate'].dirty || addManagerForm.controls['endDate'].touched)" class="text-danger">
+        End date is required.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="addManagerForm.invalid">Assign Manager</button>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
+</div>

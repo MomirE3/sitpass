@@ -1,0 +1,46 @@
+.container {
+  .row {
+    .profile-img {
+      img {
+        width: 100%;
+        height: auto;
+        max-width: 200px; 
+        max-height: 200px; 
+        margin: auto;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-control {
+        width: 100%;
+      }
+
+      .input-group {
+        display: flex;
+
+        .input-group-append {
+          button {
+            border-left: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+          }
+
+          .fa {
+            pointer-events: none;
+          }
+        }
+      }
+    }
+
+    .btn-primary {
+      width: 100%;
+    }
+  }
+}

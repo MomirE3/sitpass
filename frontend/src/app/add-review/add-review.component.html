@@ -1,0 +1,59 @@
+<app-header></app-header>
+<div class="container mt-5">
+  <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    <div class="mb-3">
+      <label for="facilityId" class="form-label">Facility: </label>
+      <select class="form-select" id="facilityId" formControlName="facilityId" (change)="onFacilityChange()">
+        <option value=""></option>
+        <option *ngFor="let facility of facilities" [value]="facility.id">{{ facility.name }}</option>
+      </select>
+      <div *ngIf="reviewForm.get('facilityId')?.touched && reviewForm.get('facilityId')?.invalid" class="text-danger">
+        Facility is required.
+      </div>
+    </div>
+    <div *ngIf="numberOfVisits !== null" class="mb-3">
+      <label for="numberOfVisits" class="form-label">Number of Visits: </label>
+      <input type="text" class="form-control" id="numberOfVisits" [value]="numberOfVisits" readonly>
+      <div *ngIf="isAdmin" class="text-warning">Admins may not have personal visit data.</div>
+    </div>
+    <div class="mb-3">
+      <label for="equipmentRating" class="form-label">Equipment Rating (1-10): </label>
+      <input type="number" class="form-control" id="equipmentRating" formControlName="equipmentRating" min="1" max="10">
+      <div *ngIf="reviewForm.get('equipmentRating')?.touched && reviewForm.get('equipmentRating')?.invalid" class="text-danger">
+        Valid equipment rating is required (1-10).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="staffRating" class="form-label">Staff Rating (1-10): </label>
+      <input type="number" class="form-control" id="staffRating" formControlName="staffRating" min="1" max="10">
+      <div *ngIf="reviewForm.get('staffRating')?.touched && reviewForm.get('staffRating')?.invalid" class="text-danger">
+        Valid staff rating is required (1-10).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="hygieneRating" class="form-label">Hygiene Rating (1-10): </label>
+      <input type="number" class="form-control" id="hygieneRating" formControlName="hygieneRating" min="1" max="10">
+      <div *ngIf="reviewForm.get('hygieneRating')?.touched && reviewForm.get('hygieneRating')?.invalid" class="text-danger">
+        Valid hygiene rating is required (1-10).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="spaceRating" class="form-label">Space Rating (1-10): </label>
+      <input type="number" class="form-control" id="spaceRating" formControlName="spaceRating" min="1" max="10">
+      <div *ngIf="reviewForm.get('spaceRating')?.touched && reviewForm.get('spaceRating')?.invalid" class="text-danger">
+        Valid space rating is required (1-10).
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="comment" class="form-label">Comment: </label>
+      <textarea class="form-control" id="comment" formControlName="comment"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!reviewForm.valid">Submit</button>
+  </form>
+</div>

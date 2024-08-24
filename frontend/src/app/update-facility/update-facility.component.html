@@ -1,0 +1,71 @@
+<app-header></app-header>
+
+<div class="container mt-4">
+  <form [formGroup]="facilityForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input id="name" formControlName="name" type="text" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label for="city" class="form-label">City</label>
+      <input id="city" formControlName="city" type="text" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label for="address" class="form-label">Address</label>
+      <input id="address" formControlName="address" type="text" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" formControlName="description" class="form-control"></textarea>
+    </div>
+
+    <div formArrayName="disciplines" class="mb-3">
+      <label class="form-label">Disciplines</label>
+      <div *ngFor="let discipline of disciplines.controls; let i = index" [formGroupName]="i" class="input-group mb-2">
+        <input formControlName="name" type="text" class="form-control" />
+        <button type="button" (click)="removeDiscipline(i)" class="btn btn-danger">Remove</button>
+      </div>
+      <button type="button" (click)="addDiscipline()" class="btn btn-primary">Add Discipline</button>
+    </div>
+
+    <div formArrayName="workDays" class="mb-3">
+      <label class="form-label">Work Days</label>
+      <div *ngFor="let workDay of workDays.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-2">
+        <div class="mb-3">
+          <label for="day" class="form-label">Day</label>
+          <select formControlName="day" class="form-control">
+            <option *ngFor="let day of getAvailableDays(i)" [value]="day">{{ day | titlecase }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="from" class="form-label">From</label>
+          <input formControlName="from" type="time" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="until" class="form-label">Until</label>
+          <input formControlName="until" type="time" class="form-control" />
+        </div>
+        <button type="button" (click)="removeWorkDay(i)" class="btn btn-danger">Remove</button>
+      </div>
+      <button type="button" (click)="addWorkDay()" class="btn btn-primary">Add Work Day</button>
+    </div>
+
+    <div formArrayName="images" class="mb-3">
+      <label class="form-label">Existing Images</label>
+      <div *ngFor="let image of images.controls; let i = index" [formGroupName]="i" class="input-group mb-2">
+        <img [src]="image.get('path')?.value" alt="Facility Image" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;"/>
+        <button type="button" (click)="removeImage(i)" class="btn btn-danger">Remove</button>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="newImages" class="form-label">Add New Images</label>
+      <input id="newImages" type="file" (change)="onNewImageChange($event)" multiple class="form-control" />
+      <div *ngFor="let newImage of newImages">
+        <img [src]="newImage.preview" alt="New Image" class="img-thumbnail" style="max-width: 150px; margin-right: 10px;" />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="!facilityForm.valid">Update Facility</button>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<app-header></app-header>
+<div class="container reviews-container">
+  <h2 class="text-center">My Reviews</h2>
+  <ul class="reviews-list">
+    <li class="review-item" *ngFor="let review of reviews" [ngClass]="{'hidden-review': review.hidden}">
+      <div class="review-details">
+        <p><strong>User Email:</strong> {{ review.email }}</p>
+        <p><strong>Equipment Rating:</strong> {{ review.equipmentRating }}</p>
+        <p><strong>Staff Rating:</strong> {{ review.staffRating }}</p>
+        <p><strong>Hygiene Rating:</strong> {{ review.hygieneRating }}</p>
+        <p><strong>Space Rating:</strong> {{ review.spaceRating }}</p>
+        <p><strong>Comment:</strong> {{ review.comment }}</p>
+      </div>
+      <div class="review-actions">
+        <button class="btn btn-primary" (click)="openReplyDialog(review.id)">Reply</button>
+      </div>
+      <ul class="comments-list">
+        <ng-container *ngFor="let comment of review.comments">
+          <li class="comment-item" *ngIf="!comment.parentCommentId">
+            <div class="comment-details">
+              <p><strong>{{ comment.email }}</strong>: {{ comment.text }}</p>
+            </div>
+            <div class="comment-actions">
+              <button class="btn btn-primary" (click)="openReplyDialog(comment.id)">Reply</button>
+            </div>
+            <ul class="replies-list">
+              <ng-container *ngFor="let reply of comment.replies">
+                <li class="reply-item">
+                  <div class="reply-details">
+                    <p><strong>{{ reply.email }}</strong>: {{ reply.text }}</p>
+                  </div>
+                  <div class="reply-actions">
+                    <button class="btn btn-primary" (click)="openReplyDialog(reply.id)">Reply</button>
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </li>
+  </ul>
+</div>

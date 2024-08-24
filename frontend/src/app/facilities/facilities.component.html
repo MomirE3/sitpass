@@ -1,0 +1,229 @@
+<app-header></app-header>
+
+<button
+  class="btn btn-primary"
+  type="button"
+  data-bs-toggle="offcanvas"
+  data-bs-target="#offcanvasExample"
+  aria-controls="offcanvasExample"
+>
+  Filter
+</button>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasExample"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+      Filter Facilities
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <form (ngSubmit)="applyFilters()">
+      <div class="mb-3">
+        <label for="citySelect" class="form-label">Cities</label>
+        <div *ngFor="let city of cities">
+          <input
+            type="checkbox"
+            [value]="city"
+            (change)="onCheckboxChange($event, 'cities')"
+            [checked]="filters.cities.includes(city)"
+          /> {{ city }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="ratingMin" class="form-label">Min Rating</label>
+        <input
+          type="number"
+          class="form-control"
+          id="ratingMin"
+          [(ngModel)]="filters.minRating"
+          name="minRating"
+          min="0"
+          max="5"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="ratingMax" class="form-label">Max Rating</label>
+        <input
+          type="number"
+          class="form-control"
+          id="ratingMax"
+          [(ngModel)]="filters.maxRating"
+          name="maxRating"
+          min="0"
+          max="5"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="fromTime" class="form-label">From Time</label>
+        <input
+          type="time"
+          class="form-control"
+          id="fromTime"
+          [(ngModel)]="filters.fromTime"
+          name="fromTime"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="untilTime" class="form-label">Until Time</label>
+        <input
+          type="time"
+          class="form-control"
+          id="untilTime"
+          [(ngModel)]="filters.untilTime"
+          name="untilTime"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="disciplineSelect" class="form-label">Disciplines</label>
+        <div *ngFor="let discipline of disciplines">
+          <input
+            type="checkbox"
+            [value]="discipline"
+            (change)="onCheckboxChange($event, 'disciplines')"
+            [checked]="filters.disciplines.includes(discipline)"
+          /> {{ discipline }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </form>
+    <button class="btn btn-secondary mt-3" (click)="clearFilters()">Clear Filters</button>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="isFiltered; else defaultView">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let facility of filteredFacilities">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ facility.city }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ facility.address }}</h6>
+            <p class="card-text">{{ facility.description }}</p>
+            <p class="card-text">
+              <a [routerLink]="['/facilities', facility.id]"><strong>{{ facility.name }}</strong></a>,
+              Total Rating: {{ facility.totalRating | number:'1.1-1' }}
+            </p>
+            <button *ngIf="isUserOrAdmin && facility.id" class="btn btn-primary btn-appointment" (click)="openModal(facility.id)">Make an Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #defaultView>
+    <h3>Facilities in Your City</h3>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let facility of facilitiesInCity">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ facility.city }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ facility.address }}</h6>
+            <p class="card-text">{{ facility.description }}</p>
+            <p class="card-text">
+              <a [routerLink]="['/facilities', facility.id]"><strong>{{ facility.name }}</strong></a>,
+              Total Rating: {{ facility.totalRating | number:'1.1-1' }}
+            </p>
+            <button *ngIf="isUserOrAdmin && facility.id" class="btn btn-primary btn-appointment" (click)="openModal(facility.id)">Make an Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Most Popular Facilities</h3>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let facility of mostPopularFacilities">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ facility.city }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ facility.address }}</h6>
+            <p class="card-text">{{ facility.description }}</p>
+            <p class="card-text">
+              <a [routerLink]="['/facilities', facility.id]"><strong>{{ facility.name }}</strong></a>,
+              Total Rating: {{ facility.totalRating | number:'1.1-1' }}
+            </p>
+            <button *ngIf="isUserOrAdmin && facility.id" class="btn btn-primary btn-appointment" (click)="openModal(facility.id)">Make an Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Visited Facilities</h3>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let facility of visitedFacilities">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ facility.city }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ facility.address }}</h6>
+            <p class="card-text">{{ facility.description }}</p>
+            <p class="card-text">
+              <a [routerLink]="['/facilities', facility.id]"><strong>{{ facility.name }}</strong></a>,
+              Total Rating: {{ facility.totalRating | number:'1.1-1' }}
+            </p>
+            <button *ngIf="isUserOrAdmin && facility.id" class="btn btn-primary btn-appointment" (click)="openModal(facility.id)">Make an Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Try Something New</h3>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let facility of newFacilities">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ facility.city }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ facility.address }}</h6>
+            <p class="card-text">{{ facility.description }}</p>
+            <p class="card-text">
+              <a [routerLink]="['/facilities', facility.id]"><strong>{{ facility.name }}</strong></a>,
+              Total Rating: {{ facility.totalRating | number:'1.1-1' }}
+            </p>
+            <button *ngIf="isUserOrAdmin && facility.id" class="btn btn-primary btn-appointment" (click)="openModal(facility.id)">Make an Appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center" *ngIf="isMoreAvailable">
+      <button class="btn btn-outline-primary" (click)="exploreMore()">Explore More</button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Modals -->
+<div *ngFor="let facility of (isFiltered ? filteredFacilities : facilitiesInCity.concat(mostPopularFacilities, visitedFacilities, newFacilities))">
+  <div class="modal fade" [id]="'appointmentModal' + facility.id" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="appointmentModalLabel">Make an Appointment for {{ facility.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="from" class="form-label">From</label>
+              <input id="from" formControlName="from" type="datetime-local" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="until" class="form-label">Until</label>
+              <input id="until" formControlName="until" type="datetime-local" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!appointmentForm.valid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

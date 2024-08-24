@@ -1,0 +1,76 @@
+<app-header></app-header>
+
+<div class="container mt-4" *ngIf="facility">
+  <div *ngIf="facility.images && facility.images.length > 0" class="facility-images mb-4">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button *ngFor="let image of facility.images; let i = index" type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i" [class.active]="i === 0" aria-current="true" [attr.aria-label]="'Slide ' + (i + 1)"></button>
+      </div>
+      <div class="carousel-inner">
+        <div *ngFor="let image of facility.images; let i = index" class="carousel-item" [class.active]="i === 0">
+          <img [src]="image" class="d-block w-100 facility-image" alt="Facility Image {{i + 1}}">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <p><strong>Name:</strong> {{ facility.name }}</p>
+  <p><strong>Description:</strong> {{ facility.description }}</p>
+  <p><strong>Address:</strong> {{ facility.address }}</p>
+  <p><strong>City:</strong> {{ facility.city }}</p>
+  <p><strong>Total Rating:</strong> {{ facility.totalRating }}</p>
+  
+  <div>
+    <strong>Disciplines:</strong>
+    <ul>
+      <li *ngFor="let discipline of facility.disciplines">{{ discipline }}</li>
+    </ul>
+  </div>
+  
+  <div>
+    <strong>Work Days:</strong>
+    <ul>
+      <li *ngFor="let workDay of sortedWorkDays()">
+        {{ workDay.day }}: {{ formatTime(workDay.from) }} - {{ formatTime(workDay.until) }}
+      </li>
+    </ul>
+  </div>
+
+  <button *ngIf="isManager" class="btn btn-primary mt-3" (click)="navigateToUpdate()">Edit Facility</button>
+  <button *ngIf="isManager" class="btn btn-secondary mt-3 ms-2" (click)="navigateToAnalytics()">View Analytics</button>
+</div>
+
+<div class="container mt-4" *ngIf="!facility">
+  <p>Loading facility details...</p>
+</div>
+
+<div class="container mt-4" *ngIf="facility">
+  <div class="sorting-controls">
+    <button class="btn btn-secondary me-2" (click)="fetchReviewsSortedByRating(true)">Sort by Rating Ascending</button>
+    <button class="btn btn-secondary me-2" (click)="fetchReviewsSortedByRating(false)">Sort by Rating Descending</button>
+    <button class="btn btn-secondary me-2" (click)="fetchReviewsSortedByDate(true)">Sort by Date Ascending</button>
+    <button class="btn btn-secondary me-2" (click)="fetchReviewsSortedByDate(false)">Sort by Date Descending</button>
+  </div>
+
+  <div class="reviews-list mt-4">
+    <div *ngFor="let review of reviews" class="review-card card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Review by {{ review.email }}</h5>
+        <p class="card-text">Equipment: {{ review.equipmentRating }}</p>
+        <p class="card-text">Staff: {{ review.staffRating }}</p>
+        <p class="card-text">Hygiene: {{ review.hygieneRating }}</p>
+        <p class="card-text">Space: {{ review.spaceRating }}</p>
+        <p class="card-text">Total Rating: {{ (review.equipmentRating + review.staffRating + review.hygieneRating + review.spaceRating) / 4 }}</p>
+        <p class="card-text">Review Date: {{ review.createdAt }}</p>
+      </div>
+    </div>
+  </div>
+</div>

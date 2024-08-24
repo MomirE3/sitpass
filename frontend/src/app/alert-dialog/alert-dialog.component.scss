@@ -1,0 +1,13 @@
+.modal.show {
+  display: block;
+  opacity: 1;
+}
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Ensures the modal is centered vertically */
+}

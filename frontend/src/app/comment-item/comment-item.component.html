@@ -1,0 +1,13 @@
+<li class="comment-item">
+  <div class="comment-details">
+    <p><strong>{{ comment.email }}</strong>: {{ comment.text }}</p>
+  </div>
+  <div class="comment-actions">
+    <button class="btn btn-primary" (click)="openReplyDialog()">Reply</button>
+  </div>
+  <ul class="replies-list">
+    <ng-container *ngFor="let reply of comment.replies">
+      <app-comment-item [comment]="reply" (replyClicked)="replyClicked.emit($event)"></app-comment-item>
+    </ng-container>
+  </ul>
+</li>
